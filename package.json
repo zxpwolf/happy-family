@@ -1,0 +1,49 @@
+{
+  "name": "height-assessment",
+  "version": "1.0.0",
+  "description": "儿童身高评估 H5 页面 - 单元测试",
+  "scripts": {
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:verbose": "jest --verbose --coverage",
+    "test:clear": "jest --clearCache"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "@types/jest": "^29.5.11"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "coverageDirectory": "coverage",
+    "coverageReporters": ["text", "text-summary", "html", "lcov"],
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!node_modules/**",
+      "!coverage/**",
+      "!**/*.test.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 95,
+        "functions": 95,
+        "lines": 95,
+        "statements": 95
+      }
+    },
+    "testMatch": [
+      "**/*.test.js"
+    ],
+    "verbose": true,
+    "collectCoverage": true
+  },
+  "keywords": [
+    "height",
+    "assessment",
+    "children",
+    "health",
+    "test"
+  ],
+  "author": "",
+  "license": "MIT"
+}
