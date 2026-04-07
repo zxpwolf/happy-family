@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>身高评估报告 - Happy Family</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script src="db.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.25);
+    }
+
+    .report-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 25px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .report-header h1 {
+      color: #2d3436;
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .report-header p {
+      color: #636e72;
+      font-size: 14px;
+    }
+
+    .child-info {
+      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 25px;
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .child-info-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    .child-info-item {
+      text-align: center;
+    }
+
+    .child-info-label {
+      font-size: 12px;
+      color: #636e72;
+      margin-bottom: 5px;
+    }
+
+    .child-info-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2d3436;
+    }
+
+    .section {
+      margin-bottom: 25px;
+      padding: 25px;
+      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2d3436;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #636e72;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .stat-unit {
+      font-size: 12px;
+      color: #b2bec3;
+    }
+
+    .percentile-bar {
+      width: 100%;
+      height: 35px;
+      background: #e9ecef;
+      border-radius: 18px;
+      overflow: hidden;
+      margin: 18px 0;
+    }
+
+    .percentile-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff6b6b 0%, #feca57 35%, #48dbfb 65%, #27ae60 100%);
+      border-radius: 18px;
+    }
+
+    .percentile-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #636e72;
+    }
+
+    .chart-container {
+      background: white;
+      border-radius: 16px;
+      padding: 25px;
+      margin-top: 20px;
+    }
+
+    .chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e9ecef;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #636e72;
+    }
+
+    .legend-color {
+      width: 20px;
+      height: 5px;
+      border-radius: 3px;
+    }
+
+    .action-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .action-btn {
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .action-btn.primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
+    }
+
+    .action-btn.success {
+      background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+      color: white;
+      box-shadow: 0 8px 25px rgba(39, 174, 96, 0.35);
+    }
+
+    .action-btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .tip {
+      background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+      padding: 20px;
+      border-radius: 14px;
+      border-left: 4px solid #f39c12;
+      margin-top: 25px;
+    }
+
+    .tip p {
+      font-size: 13px;
+      color: #856404;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="report-header">
+      <h1>📊 身高评估报告</h1>
+      <p>专业医学评估 · 科学预测未来</p>
+    </div>
+
+    <!-- 宝贝信息 -->
+    <div class="child-info">
+      <div class="child-info-grid" id="childInfoGrid">
+        <!-- 动态填充 -->
+      </div>
+    </div>
+
+    <!-- 当前身高状态 -->
+    <div class="section">
+      <div class="section-title">📏 当前身高状态</div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">当前身高</div>
+          <div class="stat-value" id="currentHeight">--</div>
+          <div class="stat-unit">cm</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">百分位排名</div>
+          <div class="stat-value" id="percentile">--</div>
+          <div class="stat-unit">P 值</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">超过同龄人</div>
+          <div class="stat-value" id="surpassPercent">--</div>
+          <div class="stat-unit">%</div>
+        </div>
+      </div>
+      <div class="percentile-bar">
+        <div class="percentile-fill" id="percentileFill" style="width: 0%"></div>
+      </div>
+      <div class="percentile-labels">
+        <span>P3</span>
+        <span>P10</span>
+        <span>P25</span>
+        <span>P50</span>
+        <span>P75</span>
+        <span>P90</span>
+        <span>P97</span>
+      </div>
+    </div>
+
+    <!-- 身高预测 -->
+    <div class="section">
+      <div class="section-title">🔮 身高预测</div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">预测成年身高</div>
+          <div class="stat-value" id="predictedHeight">--</div>
+          <div class="stat-unit">cm</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">遗传身高</div>
+          <div class="stat-value" id="geneticHeight">--</div>
+          <div class="stat-unit">cm</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">预测范围</div>
+          <div class="stat-value" id="heightRange">--</div>
+          <div class="stat-unit">cm</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 生长曲线 -->
+    <div class="section">
+      <div class="section-title">📈 生长曲线</div>
+      <div class="chart-container">
+        <canvas id="growthChart"></canvas>
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-color" style="background: #e74c3c;"></div><span>P97</span></div>
+          <div class="legend-item"><div class="legend-color" style="background: #27ae60;"></div><span>P50</span></div>
+          <div class="legend-item"><div class="legend-color" style="background: #9b59b6;"></div><span>P3</span></div>
+          <div class="legend-item"><div class="legend-color" style="background: #2d3436; height: 5px;"></div><span>您的孩子</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 温馨提示 -->
+    <div class="tip">
+      <p>💡 <strong>温馨提示：</strong></p>
+      <p>• P 值表示百分位排名，P50 表示超过 50% 的同龄孩子</p>
+      <p>• P3-P97 范围内都属于正常，低于 P3 或高于 P97 建议咨询医生</p>
+      <p>• 身高受遗传 (70%)、营养、运动、睡眠、环境等多因素影响</p>
+      <p>• 保持均衡饮食、充足睡眠和适量运动有助于健康成长</p>
+    </div>
+
+    <!-- 操作按钮 -->
+    <div class="action-buttons">
+      <button class="action-btn success" onclick="saveAsImage()">
+        📷 保存报告
+      </button>
+      <button class="action-btn primary" onclick="backToHome()">
+        🏠 返回首页
+      </button>
+    </div>
+  </div>
+
+  <script src="report.js"></script>
+</body>
+</html>

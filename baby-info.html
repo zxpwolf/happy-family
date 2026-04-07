@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>添加宝贝信息 - Happy Family</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.25);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header-icon {
+      font-size: 56px;
+      margin-bottom: 15px;
+    }
+
+    .header h1 {
+      color: #2d3436;
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: #636e72;
+      font-size: 14px;
+    }
+
+    /* 说明性文字区域 */
+    .info-banner {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 16px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .info-banner-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-banner-content {
+      font-size: 14px;
+      line-height: 1.8;
+      opacity: 0.95;
+    }
+
+    .info-banner-content ul {
+      margin-left: 20px;
+      margin-top: 10px;
+    }
+
+    .info-banner-content li {
+      margin-bottom: 5px;
+    }
+
+    .info-banner-features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .feature-item {
+      text-align: center;
+    }
+
+    .feature-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .feature-text {
+      font-size: 12px;
+    }
+
+    /* 表单样式 */
+    .form-section {
+      background: #f8f9fa;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 25px;
+    }
+
+    .form-section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2d3436;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      color: #2d3436;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 15px;
+      transition: all 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .row {
+      display: flex;
+      gap: 15px;
+    }
+
+    .row .form-group {
+      flex: 1;
+    }
+
+    .gender-select {
+      display: flex;
+      gap: 12px;
+    }
+
+    .gender-option {
+      flex: 1;
+      padding: 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: white;
+    }
+
+    .gender-option:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+    }
+
+    .gender-option.selected {
+      border-color: #667eea;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    }
+
+    .gender-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .gender-label {
+      font-size: 14px;
+      color: #2d3436;
+      font-weight: 500;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.45);
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .back-link a {
+      color: #667eea;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-icon">👶</div>
+      <h1>添加宝贝信息</h1>
+      <p>完善信息，获取专业身高评估报告</p>
+    </div>
+
+    <!-- 说明性文字区域 -->
+    <div class="info-banner">
+      <div class="info-banner-title">
+        🏥 专业医学评估
+      </div>
+      <div class="info-banner-content">
+        <p>本系统基于<strong>中国儿童生长发育标准数据</strong>，为您提供科学、专业的身高评估服务。</p>
+        <ul>
+          <li>采用 2009 年中国九城市儿童生长发育调查数据</li>
+          <li>结合遗传身高计算和当前生长趋势分析</li>
+          <li>P 值百分位评估，了解孩子在全国的位置</li>
+        </ul>
+        
+        <div class="info-banner-features">
+          <div class="feature-item">
+            <div class="feature-icon">📊</div>
+            <div class="feature-text">专业医学评估</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📈</div>
+            <div class="feature-text">完善宝贝信息</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🔮</div>
+            <div class="feature-text">预测成年身高</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 表单区域 -->
+    <form id="babyInfoForm">
+      <div class="form-section">
+        <div class="form-section-title">
+          📝 宝贝基本信息
+        </div>
+
+        <div class="form-group">
+          <label>宝贝姓名</label>
+          <input type="text" id="childName" placeholder="例如：小明">
+        </div>
+
+        <div class="form-group">
+          <label>宝贝性别</label>
+          <div class="gender-select">
+            <div class="gender-option" data-gender="boy" onclick="selectGender('boy')">
+              <div class="gender-icon">👦</div>
+              <div class="gender-label">男孩</div>
+            </div>
+            <div class="gender-option" data-gender="girl" onclick="selectGender('girl')">
+              <div class="gender-icon">👧</div>
+              <div class="gender-label">女孩</div>
+            </div>
+          </div>
+          <input type="hidden" id="gender" required>
+        </div>
+
+        <div class="form-group">
+          <label>出生日期</label>
+          <input type="date" id="birthDate" required>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">
+          📏 当前身体指标
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label>当前身高 (cm)</label>
+            <input type="number" id="currentHeight" placeholder="例如：120" min="50" max="200" required>
+          </div>
+          <div class="form-group">
+            <label>当前体重 (kg)</label>
+            <input type="number" id="currentWeight" placeholder="例如：25" min="2" max="100" step="0.1" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">
+          👨‍👩‍👧 父母身高信息
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label>父亲身高 (cm)</label>
+            <input type="number" id="fatherHeight" placeholder="例如：175" min="100" max="220" required>
+          </div>
+          <div class="form-group">
+            <label>母亲身高 (cm)</label>
+            <input type="number" id="motherHeight" placeholder="例如：163" min="100" max="220" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">
+          🎯 期望身高（可选）
+        </div>
+
+        <div class="form-group">
+          <label>期望成年身高 (cm)</label>
+          <input type="number" id="targetHeight" placeholder="例如：180" min="100" max="220">
+          <p style="font-size: 12px; color: #636e72; margin-top: 8px;">填写期望身高，我们将评估达成难度</p>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">
+        🚀 立即测评
+      </button>
+
+      <div class="back-link">
+        <a href="login.html">← 返回登录页</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    let selectedGender = '';
+
+    // 选择性别
+    function selectGender(gender) {
+      selectedGender = gender;
+      document.getElementById('gender').value = gender;
+      document.querySelectorAll('.gender-option').forEach(opt => opt.classList.remove('selected'));
+      document.querySelector(`[data-gender="${gender}"]`).classList.add('selected');
+    }
+
+    // 检查登录状态
+    window.addEventListener('load', function() {
+      const user = localStorage.getItem('currentUser');
+      if (!user) {
+        // 未登录，跳转到登录页
+        window.location.href = 'login.html';
+      }
+      
+      // 设置默认日期为 10 年前
+      const tenYearsAgo = new Date();
+      tenYearsAgo.setFullYear(tenYearsAgo.getFullYear() - 10);
+      document.getElementById('birthDate').valueAsDate = tenYearsAgo;
+    });
+
+    // 表单提交
+    document.getElementById('babyInfoForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (!selectedGender) {
+        alert('请选择宝贝性别');
+        return;
+      }
+
+      // 收集数据
+      const formData = {
+        childName: document.getElementById('childName').value || '匿名宝贝',
+        gender: selectedGender,
+        birthDate: document.getElementById('birthDate').value,
+        currentHeight: parseFloat(document.getElementById('currentHeight').value),
+        currentWeight: parseFloat(document.getElementById('currentWeight').value),
+        fatherHeight: parseFloat(document.getElementById('fatherHeight').value),
+        motherHeight: parseFloat(document.getElementById('motherHeight').value),
+        targetHeight: document.getElementById('targetHeight').value || null
+      };
+
+      // 保存到 sessionStorage（传递给报告页）
+      sessionStorage.setItem('assessmentData', JSON.stringify(formData));
+
+      // 跳转到报告页面
+      window.location.href = 'report.html';
+    });
+  </script>
+</body>
+</html>
