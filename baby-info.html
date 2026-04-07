@@ -356,7 +356,9 @@
       </button>
 
       <div class="back-link">
-        <a href="login.html">← 返回登录页</a>
+        <a href="#" onclick="backToLogin(); return false;">← 返回登录页</a>
+        <span style="margin: 0 10px; color: #dfe6e9;">|</span>
+        <a href="#" onclick="logout(); return false;">退出登录</a>
       </div>
     </form>
   </div>
@@ -372,12 +374,28 @@
       document.querySelector(`[data-gender="${gender}"]`).classList.add('selected');
     }
 
+    // 返回登录页
+    function backToLogin() {
+      window.location.href = 'login.html';
+    }
+
+    // 退出登录
+    function logout() {
+      if (confirm('确定要退出登录吗？')) {
+        localStorage.removeItem('currentUser');
+        window.location.href = 'login.html';
+      }
+    }
+
     // 检查登录状态
     window.addEventListener('load', function() {
       const user = localStorage.getItem('currentUser');
       if (!user) {
-        // 未登录，跳转到登录页
-        window.location.href = 'login.html';
+        // 未登录，显示提示并提供跳转选项
+        if (confirm('您还未登录，是否前往登录页？')) {
+          window.location.href = 'login.html';
+        }
+        // 允许游客继续填写，但提交时会提示
       }
       
       // 设置默认日期为 10 年前
