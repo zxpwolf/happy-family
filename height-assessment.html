@@ -7,7 +7,6 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script src="db.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -16,272 +15,133 @@
     }
 
     body {
-      font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(180deg, #E8F5E9 0%, #C8E6C9 100%);
       min-height: 100vh;
-      padding: 20px;
+      padding: 0;
       position: relative;
-      overflow-x: hidden;
-    }
-
-    /* 背景装饰 */
-    body::before {
-      content: '';
-      position: fixed;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      animation: float 20s ease-in-out infinite;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      50% { transform: translate(30px, 30px) rotate(180deg); }
     }
 
     .container {
       max-width: 750px;
       margin: 0 auto;
-      background: rgba(255, 255, 255, 0.98);
-      border-radius: 24px;
-      padding: 40px;
-      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255,255,255,0.2);
-      backdrop-filter: blur(20px);
-      position: relative;
-      z-index: 1;
+      background: #F5F5F5;
+      min-height: 100vh;
     }
 
-    /* 家庭照片区域 */
-    .family-photo-section {
-      text-align: center;
-      margin-bottom: 35px;
-      position: relative;
-    }
-
-    .family-photo-frame {
-      display: inline-block;
-      position: relative;
-      padding: 8px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 20px;
-      box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
-    }
-
-    .family-photo {
-      width: 100%;
-      max-width: 280px;
-      height: 200px;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      border-radius: 16px;
+    /* 顶部导航 */
+    .top-bar {
+      background: linear-gradient(135deg, #66BB6A 0%, #4CAF50 100%);
+      padding: 12px 16px;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      font-size: 80px;
-      position: relative;
-      overflow: hidden;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
-    .family-photo-illustration {
+    .top-bar-title {
+      color: white;
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .top-bar-actions {
       display: flex;
-      align-items: flex-end;
-      gap: 15px;
-      padding-bottom: 20px;
+      gap: 12px;
     }
 
-    .family-member {
+    .top-bar-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* 表单页面 */
+    .form-page {
+      background: white;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    .form-header {
+      padding: 24px 16px;
+      text-align: center;
+      position: relative;
+    }
+
+    .form-header h1 {
+      font-size: 20px;
+      color: #2E7D32;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .form-header p {
+      font-size: 13px;
+      color: #81C784;
+    }
+
+    /* 插图区域 */
+    .illustration {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 8px;
+      padding: 20px 16px;
+      background: linear-gradient(180deg, #E8F5E9 0%, #F1F8E9 100%);
+      margin: 0 16px 20px;
+      border-radius: 16px;
+      position: relative;
+      min-height: 140px;
+    }
+
+    .illustration-char {
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    .member-head {
-      width: 50px;
-      height: 50px;
+    .char-head {
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 28px;
-      margin-bottom: 8px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    .member-head.dad { background: linear-gradient(135deg, #667eea, #5568d3); }
-    .member-head.mom { background: linear-gradient(135deg, #f093fb, #e076d6); }
-    .member-head.child { background: linear-gradient(135deg, #feca57, #ff9f43); }
-
-    .member-body {
-      width: 40px;
-      height: 55px;
-      border-radius: 20px 20px 0 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
+    .char-body {
+      font-size: 32px;
+      margin-top: -4px;
     }
 
-    .member-body.dad { background: linear-gradient(135deg, #54a0ff, #2e86de); height: 70px; }
-    .member-body.mom { background: linear-gradient(135deg, #ff9ff3, #f368e0); height: 65px; }
-    .member-body.child { background: linear-gradient(135deg, #48dbfb, #0abde3); height: 45px; }
-
-    .family-label {
-      margin-top: 15px;
-      font-size: 16px;
-      color: #666;
-      font-weight: 500;
+    .char-mom {
+      background: linear-gradient(135deg, #FFCDD2 0%, #F8BBD9 100%);
     }
 
-    .family-label strong {
-      color: #667eea;
+    .char-child {
+      background: linear-gradient(135deg, #BBDEFB 0%, #B3E5FC 100%);
     }
 
-    /* 装饰元素 */
-    .decoration {
+    .height-ruler {
       position: absolute;
-      font-size: 24px;
-      animation: bounce 2s ease-in-out infinite;
+      right: 20px;
+      top: 10px;
+      font-size: 32px;
     }
 
-    .decoration:nth-child(1) { top: -10px; left: 20px; animation-delay: 0s; }
-    .decoration:nth-child(2) { top: -10px; right: 20px; animation-delay: 0.5s; }
-    .decoration:nth-child(3) { bottom: -10px; left: 30px; animation-delay: 1s; }
-    .decoration:nth-child(4) { bottom: -10px; right: 30px; animation-delay: 1.5s; }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 35px;
-    }
-
-    .header-icon {
-      font-size: 56px;
-      margin-bottom: 15px;
-      display: inline-block;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
-
-    .header h1 {
-      color: #2d3436;
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      letter-spacing: -0.5px;
-    }
-
-    .header p {
-      color: #636e72;
-      font-size: 15px;
-      line-height: 1.6;
-    }
-
-    /* 顶部导航 */
-    .top-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-      padding: 15px 20px;
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
-      border-radius: 16px;
-      border: 1px solid rgba(102, 126, 234, 0.15);
-    }
-
-    .nav-user {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
-      padding: 8px 12px;
-      border-radius: 12px;
-      transition: all 0.3s;
-    }
-
-    .nav-user:hover {
-      background: rgba(102, 126, 234, 0.1);
-    }
-
-    .nav-avatar {
-      width: 42px;
-      height: 42px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 600;
-      font-size: 18px;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    }
-
-    .nav-user-info {
-      color: #2d3436;
-    }
-
-    .nav-user-name {
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .nav-user-tip {
-      font-size: 11px;
-      color: #636e72;
-    }
-
-    .nav-actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    .nav-btn {
-      padding: 10px 18px;
-      background: rgba(255,255,255,0.8);
-      border: 1px solid rgba(102, 126, 234, 0.2);
-      border-radius: 20px;
-      color: #667eea;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 500;
-      transition: all 0.3s;
-    }
-
-    .nav-btn:hover {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border-color: transparent;
-      transform: translateY(-2px);
-    }
-
-    /* 表单样式 */
+    /* 表单区域 */
     .form-section {
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-      border-radius: 20px;
-      padding: 30px;
-      margin-bottom: 30px;
-      border: 1px solid rgba(0,0,0,0.05);
-    }
-
-    .form-section-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #2d3436;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      padding: 0 16px;
     }
 
     .form-group {
@@ -290,43 +150,40 @@
 
     .form-group label {
       display: block;
-      color: #2d3436;
+      color: #555;
       font-size: 14px;
+      margin-bottom: 8px;
       font-weight: 500;
-      margin-bottom: 10px;
+    }
+
+    .form-group label .required {
+      color: #EF5350;
+      margin-right: 4px;
     }
 
     .form-group input,
     .form-group select {
       width: 100%;
-      padding: 14px 18px;
-      border: 2px solid #e0e0e0;
+      padding: 14px 16px;
+      border: 1px solid #E0E0E0;
       border-radius: 12px;
       font-size: 15px;
-      transition: all 0.3s;
       background: white;
+      transition: all 0.3s;
     }
 
     .form-group input:focus,
     .form-group select:focus {
       outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      border-color: #66BB6A;
+      box-shadow: 0 0 0 3px rgba(102, 187, 106, 0.15);
     }
 
     .form-group input::placeholder {
-      color: #b2bec3;
+      color: #BDBDBD;
     }
 
-    .row {
-      display: flex;
-      gap: 15px;
-    }
-
-    .row .form-group {
-      flex: 1;
-    }
-
+    /* 性别选择 */
     .gender-select {
       display: flex;
       gap: 12px;
@@ -335,741 +192,399 @@
     .gender-option {
       flex: 1;
       padding: 16px;
-      border: 2px solid #e0e0e0;
-      border-radius: 14px;
+      border: 2px solid #E0E0E0;
+      border-radius: 12px;
       text-align: center;
       cursor: pointer;
       transition: all 0.3s;
       background: white;
     }
 
-    .gender-option:hover {
-      border-color: #667eea;
-      transform: translateY(-2px);
-    }
-
     .gender-option.selected {
-      border-color: #667eea;
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+      border-color: #66BB6A;
+      background: #E8F5E9;
     }
 
     .gender-icon {
-      font-size: 32px;
-      margin-bottom: 8px;
+      font-size: 28px;
+      margin-bottom: 6px;
     }
 
     .gender-label {
       font-size: 14px;
-      color: #2d3436;
+      color: #555;
       font-weight: 500;
     }
 
-    .btn {
+    /* 保存按钮 */
+    .save-btn-fixed {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
       width: 100%;
-      padding: 18px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      max-width: 750px;
+      padding: 16px;
+      background: linear-gradient(135deg, #66BB6A 0%, #4CAF50 100%);
       border: none;
-      border-radius: 14px;
-      font-size: 17px;
+      color: white;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s;
-      margin-top: 10px;
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
-      position: relative;
-      overflow: hidden;
+      box-shadow: 0 -4px 20px rgba(76, 175, 80, 0.3);
+      z-index: 100;
     }
 
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 0.5s;
+    .save-btn-fixed:hover {
+      background: linear-gradient(135deg, #81C784 0%, #66BB6A 100%);
     }
 
-    .btn:hover::before {
-      left: 100%;
-    }
-
-    .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.45);
-    }
-
-    .btn:active {
-      transform: translateY(-1px);
-    }
-
-    .btn-small {
-      padding: 12px 24px;
-      font-size: 14px;
-      width: auto;
-    }
-
-    /* 结果区域 */
-    .result {
+    /* 报告页面 */
+    .report-page {
       display: none;
-      margin-top: 35px;
-      animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      background: #F5F5F5;
+      min-height: 100vh;
+      padding-bottom: 80px;
     }
 
-    .result.show {
+    .report-page.show {
       display: block;
     }
 
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(40px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    #reportArea {
-      background: white;
-      padding: 35px;
-      border-radius: 20px;
-      border: 1px solid rgba(0,0,0,0.05);
-    }
-
-    .result-section {
-      margin-bottom: 28px;
-      padding: 28px;
-      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-      border-radius: 18px;
-      border: 1px solid rgba(0,0,0,0.04);
-      transition: all 0.3s;
-    }
-
-    .result-section:hover {
-      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-      transform: translateY(-2px);
-    }
-
-    .result-title {
-      font-size: 17px;
-      color: #2d3436;
-      margin-bottom: 20px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    /* 全国排名卡片 */
-    .ranking-card {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-      border-radius: 20px;
-      padding: 30px;
-      margin-bottom: 25px;
-      color: white;
-      box-shadow: 0 15px 40px rgba(240, 147, 251, 0.35);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .ranking-card::before {
-      content: '🏆';
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 60px;
-      opacity: 0.2;
-    }
-
-    .ranking-header {
-      text-align: center;
-      margin-bottom: 25px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .ranking-title {
-      font-size: 15px;
-      opacity: 0.95;
-      margin-bottom: 12px;
-      font-weight: 500;
-    }
-
-    .ranking-value {
-      font-size: 56px;
-      font-weight: 800;
-      text-shadow: 0 4px 20px rgba(0,0,0,0.2);
-      margin-bottom: 10px;
-    }
-
-    .ranking-unit {
-      font-size: 15px;
-      opacity: 0.9;
-    }
-
-    .ranking-bar {
-      height: 24px;
-      background: rgba(255,255,255,0.25);
-      border-radius: 12px;
-      overflow: hidden;
-      margin: 20px 0;
-      box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    .ranking-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #ffffff, #ffeaa7);
-      border-radius: 12px;
-      transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    }
-
-    .ranking-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin-top: 25px;
-    }
-
-    .ranking-stat {
-      text-align: center;
-      background: rgba(255,255,255,0.18);
-      padding: 18px 12px;
-      border-radius: 14px;
-      backdrop-filter: blur(10px);
-    }
-
-    .ranking-stat-value {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .ranking-stat-label {
-      font-size: 12px;
-      opacity: 0.85;
-    }
-
-    /* 体型分析卡片 */
-    .body-type-card {
-      background: white;
-      border-radius: 18px;
-      padding: 28px;
-      margin-bottom: 25px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-      border: 1px solid rgba(0,0,0,0.04);
-    }
-
-    .body-type-header {
+    /* 孩子信息卡片 */
+    .child-info-card {
+      background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
+      margin: 16px;
+      border-radius: 16px;
+      padding: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 25px;
     }
 
-    .body-type-title {
-      font-size: 17px;
-      font-weight: 600;
-      color: #2d3436;
-    }
-
-    .body-type-badge {
-      padding: 8px 20px;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .body-type-badge.slim { background: linear-gradient(135deg, #e3f2fd, #bbdefb); color: #1565c0; }
-    .body-type-badge.normal { background: linear-gradient(135deg, #d4edda, #c3e6cb); color: #155724; }
-    .body-type-badge.overweight { background: linear-gradient(135deg, #fff3cd, #ffeaa7); color: #856404; }
-    .body-type-badge.obese { background: linear-gradient(135deg, #f8d7da, #f5c6cb); color: #721c24; }
-
-    .body-type-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-    }
-
-    .body-type-item {
-      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-      padding: 18px;
-      border-radius: 14px;
-      text-align: center;
-      border: 1px solid rgba(0,0,0,0.04);
-    }
-
-    .body-type-label {
-      font-size: 12px;
-      color: #636e72;
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-
-    .body-type-value {
-      font-size: 24px;
-      font-weight: 700;
-      color: #2d3436;
-    }
-
-    .body-type-unit {
-      font-size: 12px;
-      color: #b2bec3;
-      margin-top: 4px;
-    }
-
-    .body-type-chart {
-      margin-top: 25px;
-      padding: 20px;
-      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-      border-radius: 14px;
-      border: 1px solid rgba(0,0,0,0.04);
-    }
-
-    .body-type-bar {
-      height: 32px;
-      background: #e9ecef;
-      border-radius: 16px;
-      overflow: hidden;
-      margin: 15px 0;
-      position: relative;
-      box-shadow: inset 0 2px 8px rgba(0,0,0,0.08);
-    }
-
-    .body-type-fill {
-      height: 100%;
-      border-radius: 16px;
-      transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-    }
-
-    .body-type-fill::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    }
-
-    .body-type-fill.blue { background: linear-gradient(90deg, #667eea, #764ba2); }
-    .body-type-fill.green { background: linear-gradient(90deg, #27ae60, #2ecc71); }
-    .body-type-fill.orange { background: linear-gradient(90deg, #f39c12, #f1c40f); }
-    .body-type-fill.red { background: linear-gradient(90deg, #e74c3c, #c0392b); }
-
-    /* 健管助手卡片 */
-    .assistant-card {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 20px;
-      padding: 30px;
-      margin-bottom: 25px;
-      color: white;
-      box-shadow: 0 15px 40px rgba(102, 126, 234, 0.35);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .assistant-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -20%;
-      width: 200px;
-      height: 200px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 50%;
-    }
-
-    .assistant-header {
+    .child-info-left {
       display: flex;
       align-items: center;
-      gap: 18px;
-      margin-bottom: 25px;
-      position: relative;
-      z-index: 1;
+      gap: 12px;
     }
 
-    .assistant-avatar {
-      width: 70px;
-      height: 70px;
-      background: rgba(255,255,255,0.2);
+    .child-avatar {
+      width: 56px;
+      height: 56px;
+      background: white;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 36px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      font-size: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    .assistant-info h3 {
-      font-size: 20px;
-      margin-bottom: 6px;
-      font-weight: 600;
+    .child-info-text h2 {
+      font-size: 18px;
+      color: #2E7D32;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .assistant-info p {
+    .child-info-text p {
       font-size: 13px;
-      opacity: 0.9;
+      color: #558B2F;
     }
 
-    .assistant-services {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin-bottom: 25px;
-      position: relative;
-      z-index: 1;
+    .child-info-right {
+      text-align: right;
     }
 
-    .assistant-service {
-      background: rgba(255,255,255,0.15);
-      padding: 20px 12px;
-      border-radius: 14px;
+    .height-compare {
+      display: flex;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .height-item {
       text-align: center;
-      backdrop-filter: blur(10px);
-      transition: all 0.3s;
     }
 
-    .assistant-service:hover {
-      background: rgba(255,255,255,0.25);
-      transform: translateY(-3px);
+    .height-item-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2E7D32;
     }
 
-    .assistant-service-icon {
-      font-size: 28px;
-      margin-bottom: 10px;
+    .height-item-label {
+      font-size: 11px;
+      color: #558B2F;
+      margin-top: 2px;
     }
 
-    .assistant-service-name {
-      font-size: 12px;
-      font-weight: 500;
-    }
-
-    .assistant-btn {
-      width: 100%;
-      padding: 16px;
+    /* 综合小结 */
+    .summary-card {
       background: white;
-      color: #667eea;
-      border: none;
-      border-radius: 12px;
+      margin: 0 16px 16px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .summary-header {
+      background: linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #C8E6C9;
+    }
+
+    .summary-title {
       font-size: 16px;
+      color: #2E7D32;
       font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-      position: relative;
-      z-index: 1;
     }
 
-    .assistant-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+    .summary-date {
+      font-size: 12px;
+      color: #81C784;
     }
 
-    /* 统计卡片 */
+    .summary-body {
+      padding: 20px;
+    }
+
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
-    .stat-card {
-      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-      padding: 20px 15px;
-      border-radius: 16px;
+    .stat-item {
       text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-      border: 1px solid rgba(0,0,0,0.04);
-      transition: all 0.3s;
+      padding: 12px 8px;
+      background: #F5F5F5;
+      border-radius: 12px;
     }
 
-    .stat-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    .stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: #2E7D32;
+    }
+
+    .stat-unit {
+      font-size: 11px;
+      color: #9E9E9E;
+      margin-top: 2px;
     }
 
     .stat-label {
       font-size: 12px;
-      color: #636e72;
-      margin-bottom: 8px;
-      font-weight: 500;
+      color: #757575;
+      margin-top: 4px;
     }
 
-    .stat-value {
-      font-size: 26px;
-      font-weight: 700;
-      color: #667eea;
-      margin-bottom: 4px;
+    .percentile-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
+      color: #2E7D32;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-left: 6px;
     }
 
-    .stat-unit {
-      font-size: 12px;
-      color: #b2bec3;
+    /* 状态提示框 */
+    .status-box {
+      background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 16px;
     }
 
-    .status-good { color: #27ae60; }
-    .status-normal { color: #2980b9; }
-    .status-warning { color: #f39c12; }
-    .status-alert { color: #e74c3c; }
-
-    /* 百分位条 */
-    .percentile-bar {
-      width: 100%;
-      height: 35px;
-      background: #e9ecef;
-      border-radius: 18px;
-      overflow: hidden;
-      position: relative;
-      margin: 18px 0;
-      box-shadow: inset 0 2px 8px rgba(0,0,0,0.08);
+    .status-box.good {
+      background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
     }
 
-    .percentile-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #ff6b6b 0%, #feca57 35%, #48dbfb 65%, #27ae60 100%);
-      border-radius: 18px;
-      transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .percentile-labels {
+    .status-title {
       display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: #636e72;
-      font-weight: 500;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #2E7D32;
+      margin-bottom: 10px;
     }
 
-    .percentile-marker {
-      position: absolute;
-      top: -8px;
-      width: 5px;
-      height: 50px;
-      background: #2d3436;
-      border-radius: 3px;
-      transform: translateX(-50%);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background: #66BB6A;
+      border-radius: 50%;
     }
 
-    /* 图表容器 */
+    .status-text {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.8;
+    }
+
+    /* 身高预测卡片 */
+    .prediction-card {
+      background: white;
+      margin: 0 16px 16px;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .prediction-title {
+      font-size: 16px;
+      color: #2E7D32;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .prediction-method {
+      background: #F5F5F5;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .prediction-method-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #66BB6A;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .prediction-result {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.8;
+    }
+
+    .prediction-result strong {
+      color: #66BB6A;
+      font-size: 16px;
+    }
+
+    .prediction-result .diff {
+      color: #EF5350;
+      font-weight: 600;
+    }
+
+    .prediction-result .diff.good {
+      color: #66BB6A;
+    }
+
+    /* 图表 */
     .chart-container {
       background: white;
+      margin: 0 16px 16px;
       border-radius: 16px;
-      padding: 25px;
-      margin-top: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-      border: 1px solid rgba(0,0,0,0.04);
+      padding: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .chart-title {
+      font-size: 15px;
+      color: #2E7D32;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-align: center;
     }
 
     .chart-legend {
       display: flex;
       flex-wrap: wrap;
-      gap: 15px;
       justify-content: center;
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid #e9ecef;
+      gap: 16px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #E0E0E0;
     }
 
     .legend-item {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       font-size: 12px;
-      color: #636e72;
-      font-weight: 500;
+      color: #757575;
     }
 
     .legend-color {
-      width: 20px;
-      height: 5px;
-      border-radius: 3px;
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
     }
 
-    /* 保存按钮 */
-    .save-image-btn {
+    /* 底部按钮 */
+    .bottom-actions {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
       width: 100%;
-      padding: 18px;
-      background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
-      color: white;
+      max-width: 750px;
+      padding: 12px 16px;
+      background: white;
+      display: flex;
+      gap: 12px;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+      z-index: 100;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 14px;
       border: none;
-      border-radius: 14px;
-      font-size: 16px;
+      border-radius: 12px;
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s;
-      margin-top: 25px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      box-shadow: 0 8px 25px rgba(39, 174, 96, 0.35);
-    }
-
-    .save-image-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 35px rgba(39, 174, 96, 0.45);
-    }
-
-    /* 分享按钮 */
-    .share-btn {
-      width: 100%;
-      padding: 18px;
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-      color: white;
-      border: none;
-      border-radius: 14px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
+      gap: 8px;
       transition: all 0.3s;
-      margin-top: 12px;
-      box-shadow: 0 8px 25px rgba(240, 147, 251, 0.35);
     }
 
-    .share-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 35px rgba(240, 147, 251, 0.45);
+    .action-btn.share {
+      background: #F5F5F5;
+      color: #555;
     }
 
-    /* 分享提示 */
-    .share-tip {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    .action-btn.save {
+      background: linear-gradient(135deg, #66BB6A 0%, #4CAF50 100%);
       color: white;
-      padding: 16px 22px;
-      border-radius: 14px;
-      margin-bottom: 25px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 14px;
-      font-weight: 500;
-      box-shadow: 0 8px 25px rgba(240, 147, 251, 0.3);
     }
 
-    .share-tip-icon {
-      font-size: 22px;
-    }
-
-    /* 提示框 */
-    .tip {
-      margin-top: 25px;
-      padding: 20px;
-      background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-      border-radius: 14px;
-      border-left: 4px solid #f39c12;
-    }
-
-    .tip p {
-      font-size: 13px;
-      color: #856404;
-      line-height: 1.8;
-    }
-
-    .tip strong {
-      font-weight: 600;
-    }
-
-    /* 文章区域 */
-    .article-section {
-      background: white;
-      border-radius: 18px;
-      padding: 28px;
-      margin-top: 25px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-      border: 1px solid rgba(0,0,0,0.04);
-    }
-
-    .article-list {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .article-card {
-      border: 1px solid #e9ecef;
-      border-radius: 14px;
-      padding: 18px;
-      cursor: pointer;
-      transition: all 0.3s;
-      background: white;
-    }
-
-    .article-card:hover {
-      border-color: #667eea;
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.15);
+    .action-btn:hover {
+      opacity: 0.9;
       transform: translateY(-2px);
     }
 
-    .article-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: #2d3436;
-      margin-bottom: 10px;
-    }
-
-    .article-summary {
-      font-size: 13px;
-      color: #636e72;
-      line-height: 1.7;
-      margin-bottom: 12px;
-    }
-
-    .article-tags {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .article-tag {
-      padding: 5px 12px;
-      background: #f8f9fa;
+    /* 免责声明 */
+    .disclaimer {
+      background: #FAFAFA;
+      margin: 0 16px 100px;
+      padding: 16px;
       border-radius: 12px;
       font-size: 11px;
-      color: #636e72;
-      font-weight: 500;
-    }
-
-    .article-tag.hot { background: linear-gradient(135deg, #ffebee, #ffcdd2); color: #c62828; }
-    .article-tag.new { background: linear-gradient(135deg, #e3f2fd, #bbdefb); color: #1565c0; }
-
-    /* 标签页 */
-    .tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 22px;
-      border-bottom: 2px solid #e9ecef;
-      padding-bottom: 15px;
-      overflow-x: auto;
-    }
-
-    .tab {
-      padding: 10px 20px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      color: #636e72;
-      transition: all 0.3s;
-      white-space: nowrap;
-      background: #f8f9fa;
-    }
-
-    .tab:hover {
-      background: #e9ecef;
-    }
-
-    .tab.active {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      color: #9E9E9E;
+      line-height: 1.8;
+      text-align: center;
     }
 
     /* 弹窗 */
-    .login-modal,
-    .help-modal,
-    .wechat-modal,
-    .article-modal,
     .modal {
       display: none;
       position: fixed;
@@ -1077,690 +592,324 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(5px);
-      z-index: 3000;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
       justify-content: center;
       align-items: center;
       padding: 20px;
     }
 
-    .login-modal.show,
-    .help-modal.show,
-    .wechat-modal.show,
-    .article-modal.show,
     .modal.show {
       display: flex;
-      animation: fadeIn 0.3s ease;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .login-card,
-    .help-content,
-    .wechat-card,
     .modal-content {
       background: white;
-      border-radius: 24px;
-      padding: 35px;
+      border-radius: 20px;
+      padding: 24px;
+      max-width: 400px;
       width: 100%;
-      max-width: 450px;
-      max-height: 85vh;
+      max-height: 80vh;
       overflow-y: auto;
       position: relative;
-      box-shadow: 0 25px 80px rgba(0,0,0,0.3);
     }
 
-    .login-card-title {
-      font-size: 24px;
-      font-weight: 700;
-      color: #2d3436;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-
-    .login-card-subtitle {
-      font-size: 14px;
-      color: #636e72;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .login-input {
-      width: 100%;
-      padding: 16px 20px;
-      border: 2px solid #e9ecef;
-      border-radius: 14px;
-      font-size: 16px;
-      margin-bottom: 15px;
-      transition: all 0.3s;
-    }
-
-    .login-input:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-    }
-
-    .login-btn {
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      border-radius: 14px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
-    }
-
-    .login-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.45);
-    }
-
-    .login-close,
-    .modal-close,
-    .wechat-close {
+    .modal-close {
       position: absolute;
-      top: 18px;
-      right: 18px;
-      width: 36px;
-      height: 36px;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
       border: none;
-      background: #f8f9fa;
+      background: #F5F5F5;
       border-radius: 50%;
       cursor: pointer;
-      font-size: 20px;
-      color: #636e72;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .login-close:hover,
-    .modal-close:hover,
-    .wechat-close:hover {
-      background: #e9ecef;
-      transform: rotate(90deg);
-    }
-
-    .help-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: #2d3436;
-      margin-bottom: 25px;
-      text-align: center;
-    }
-
-    .help-section {
-      margin-bottom: 25px;
-    }
-
-    .help-section-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #667eea;
-      margin-bottom: 12px;
-    }
-
-    .help-section-content {
-      font-size: 14px;
-      color: #636e72;
-      line-height: 1.8;
-    }
-
-    .help-section-content ul {
-      margin-left: 20px;
-    }
-
-    .help-section-content li {
-      margin-bottom: 6px;
-    }
-
-    .help-close {
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      border-radius: 14px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
-    }
-
-    .wechat-title {
-      font-size: 20px;
-      font-weight: 600;
-      color: #2d3436;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-
-    .wechat-subtitle {
-      font-size: 14px;
-      color: #636e72;
-      margin-bottom: 25px;
-      text-align: center;
-    }
-
-    .wechat-qr {
-      width: 220px;
-      height: 220px;
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-      border-radius: 16px;
-      margin: 0 auto 25px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 70px;
-      border: 2px dashed #dee2e6;
-    }
-
-    .wechat-tips {
-      font-size: 13px;
-      color: #636e72;
-      line-height: 1.8;
-      text-align: center;
-    }
-
-    .wechat-tips p {
-      margin-bottom: 8px;
-    }
-
-    .wechat-close {
-      margin-top: 25px;
-      padding: 14px 35px;
-      background: #e9ecef;
-      color: #2d3436;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 15px;
-      font-weight: 500;
-      transition: all 0.3s;
-    }
-
-    .wechat-close:hover {
-      background: #dee2e6;
+      font-size: 18px;
+      color: #757575;
     }
 
     .modal-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: #2d3436;
-      margin-bottom: 18px;
+      font-size: 18px;
+      color: #2E7D32;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-align: center;
     }
 
     .modal-body {
-      font-size: 15px;
-      color: #636e72;
+      font-size: 14px;
+      color: #555;
       line-height: 1.8;
     }
 
     /* 响应式 */
     @media (max-width: 768px) {
-      .container {
-        padding: 25px;
-      }
-
-      .header h1 {
-        font-size: 24px;
-      }
-
-      .stats-grid,
-      .body-type-grid,
-      .assistant-services,
-      .ranking-stats {
+      .stats-grid {
         grid-template-columns: repeat(2, 1fr);
       }
-
-      .row {
+      
+      .height-compare {
         flex-direction: column;
+        gap: 8px;
       }
-
-      .family-photo {
-        max-width: 220px;
-        height: 160px;
+      
+      .child-info-right {
+        text-align: left;
       }
-
-      .member-head {
-        width: 40px;
-        height: 40px;
-        font-size: 22px;
-      }
-
-      .member-body {
-        width: 32px;
-        height: 45px;
-        font-size: 20px;
-      }
-
-      .member-body.dad { height: 58px; }
-      .member-body.mom { height: 52px; }
-      .member-body.child { height: 38px; }
     }
   </style>
 </head>
 <body>
-  <div class="container" id="mainContainer">
-    <!-- 家庭照片区域 -->
-    <div class="family-photo-section">
-      <div class="family-photo-frame">
-        <div class="family-photo">
-          <div class="family-photo-illustration">
-            <div class="family-member">
-              <div class="member-head dad">👨</div>
-              <div class="member-body dad">👔</div>
-            </div>
-            <div class="family-member">
-              <div class="member-head mom">👩</div>
-              <div class="member-body mom">👗</div>
-            </div>
-            <div class="family-member">
-              <div class="member-head child">👶</div>
-              <div class="member-body child">👕</div>
-            </div>
-          </div>
-        </div>
-        <div class="decoration">⭐</div>
-        <div class="decoration">💕</div>
-        <div class="decoration">🌈</div>
-        <div class="decoration">✨</div>
-      </div>
-      <div class="family-label">
-        <strong>幸福家庭</strong> · 关爱孩子成长每一步
-      </div>
-    </div>
-
+  <div class="container">
     <!-- 顶部导航 -->
-    <div class="top-nav">
-      <div class="nav-user" onclick="showLogin()">
-        <div class="nav-avatar" id="navAvatar">👤</div>
-        <div class="nav-user-info">
-          <div class="nav-user-name" id="navUserName">点击登录</div>
-          <div class="nav-user-tip">登录后查看完整报告</div>
-        </div>
-      </div>
-      <div class="nav-actions">
-        <button class="nav-btn" onclick="showHelp()">❓ 说明</button>
-        <button class="nav-btn" id="logoutBtn" onclick="logout()" style="display: none;">退出</button>
+    <div class="top-bar">
+      <div class="top-bar-title">身高记录</div>
+      <div class="top-bar-actions">
+        <button class="top-bar-btn" onclick="showHelp()">说明</button>
       </div>
     </div>
 
-    <!-- 头部 -->
-    <div class="header">
-      <div class="header-icon">📏</div>
-      <h1>儿童身高评估</h1>
-      <p>科学预测孩子未来身高 · P 值百分位分析 · 专业健康管理</p>
-    </div>
-
-    <!-- 分享提示 -->
-    <div class="share-tip" id="shareTip" style="display: none;">
-      <span class="share-tip-icon">🎉</span>
-      <span>感谢分享！已解锁全国排名功能，查看您孩子在全国的位置</span>
-    </div>
-
-    <!-- 表单区域 -->
-    <div class="form-section">
-      <div class="form-section-title">
-        📝 填写孩子信息
+    <!-- 表单页面 -->
+    <div class="form-page" id="formPage">
+      <!-- 插图区域 -->
+      <div class="illustration">
+        <div class="illustration-char">
+          <div class="char-head char-mom">👩</div>
+          <div class="char-body">👗</div>
+        </div>
+        <div class="illustration-char">
+          <div class="char-head char-child">👧</div>
+          <div class="char-body">👕</div>
+        </div>
+        <div class="height-ruler">📏</div>
       </div>
 
-      <form id="heightForm">
-        <div class="form-group">
-          <label>孩子姓名</label>
-          <input type="text" id="childName" placeholder="例如：小明">
-        </div>
-
-        <div class="form-group">
-          <label>孩子性别</label>
-          <div class="gender-select">
-            <div class="gender-option" data-gender="boy" onclick="selectGender('boy')">
-              <div class="gender-icon">👦</div>
-              <div class="gender-label">男孩</div>
-            </div>
-            <div class="gender-option" data-gender="girl" onclick="selectGender('girl')">
-              <div class="gender-icon">👧</div>
-              <div class="gender-label">女孩</div>
-            </div>
-          </div>
-          <input type="hidden" id="gender" required>
-        </div>
-
-        <div class="row">
+      <!-- 表单 -->
+      <div class="form-section">
+        <form id="heightForm">
           <div class="form-group">
-            <label>出生日期</label>
+            <label><span class="required">*</span> 宝贝</label>
+            <input type="text" id="childName" placeholder="请输入宝贝姓名" required>
+          </div>
+
+          <div class="form-group">
+            <label><span class="required">*</span> 测量时间</label>
+            <input type="date" id="measureDate" required>
+          </div>
+
+          <div class="form-group">
+            <label><span class="required">*</span> 宝贝性别</label>
+            <div class="gender-select">
+              <div class="gender-option" data-gender="boy" onclick="selectGender('boy')">
+                <div class="gender-icon">👦</div>
+                <div class="gender-label">男孩</div>
+              </div>
+              <div class="gender-option" data-gender="girl" onclick="selectGender('girl')">
+                <div class="gender-icon">👧</div>
+                <div class="gender-label">女孩</div>
+              </div>
+            </div>
+            <input type="hidden" id="gender" required>
+          </div>
+
+          <div class="form-group">
+            <label><span class="required">*</span> 出生日期</label>
             <input type="date" id="birthDate" required>
           </div>
-        </div>
 
-        <div class="row">
           <div class="form-group">
-            <label>当前身高 (cm)</label>
-            <input type="number" id="currentHeight" placeholder="例如：120" min="50" max="200" required>
+            <label><span class="required">*</span> 宝贝身高</label>
+            <input type="number" id="currentHeight" placeholder="请输入" min="50" max="200" required>
           </div>
-          <div class="form-group">
-            <label>当前体重 (kg)</label>
-            <input type="number" id="currentWeight" placeholder="例如：25" min="2" max="100" step="0.1" required>
-          </div>
-        </div>
 
-        <div class="row">
+          <div class="form-group">
+            <label><span class="required">*</span> 宝贝体重</label>
+            <input type="number" id="currentWeight" placeholder="请输入" min="2" max="100" step="0.1" required>
+          </div>
+
+          <div class="form-group">
+            <label>骨龄</label>
+            <input type="number" id="boneAge" placeholder="如未测过，可不填" step="0.1">
+          </div>
+
           <div class="form-group">
             <label>父亲身高 (cm)</label>
-            <input type="number" id="fatherHeight" placeholder="例如：175" min="100" max="220" required>
+            <input type="number" id="fatherHeight" placeholder="请输入" min="100" max="220">
           </div>
+
           <div class="form-group">
             <label>母亲身高 (cm)</label>
-            <input type="number" id="motherHeight" placeholder="例如：163" min="100" max="220" required>
+            <input type="number" id="motherHeight" placeholder="请输入" min="100" max="220">
           </div>
-        </div>
 
-        <div class="form-group">
-          <label>期望身高 (cm)</label>
-          <input type="number" id="targetHeight" placeholder="例如：180" min="100" max="220">
-        </div>
+          <div class="form-group">
+            <label>期望成年身高 (cm)</label>
+            <input type="number" id="targetHeight" placeholder="请输入" min="100" max="220">
+          </div>
+        </form>
+      </div>
 
-        <button type="submit" class="btn">🚀 开始评估</button>
-      </form>
+      <button type="submit" form="heightForm" class="save-btn-fixed">保存</button>
     </div>
 
-    <!-- 结果区域 -->
-    <div class="result" id="result">
-      <div id="reportArea">
-        <!-- 全国排名 -->
-        <div class="ranking-card" id="rankingCard" style="display: none;">
-          <div class="ranking-header">
-            <div class="ranking-title">🏆 全国同龄排名</div>
-            <div class="ranking-value">P<span id="rankingPercentile">--</span></div>
-            <div class="ranking-unit">超过全国 <span id="rankingSurpass">--</span>% 的同龄孩子</div>
+    <!-- 报告页面 -->
+    <div class="report-page" id="reportPage">
+      <!-- 孩子信息卡片 -->
+      <div class="child-info-card">
+        <div class="child-info-left">
+          <div class="child-avatar" id="reportAvatar">👧</div>
+          <div class="child-info-text">
+            <h2 id="reportChildName">豆子 <span>♀</span></h2>
+            <p id="reportAge">7 岁 1 个月 2 天</p>
           </div>
-          <div class="ranking-bar">
-            <div class="ranking-fill" id="rankingFill" style="width: 0%"></div>
-          </div>
-          <div class="ranking-stats">
-            <div class="ranking-stat">
-              <div class="ranking-stat-value" id="rankingLevel">--</div>
-              <div class="ranking-stat-label">身高水平</div>
+        </div>
+        <div class="child-info-right">
+          <div class="height-compare">
+            <div class="height-item">
+              <div class="height-item-value" id="reportGeneticHeight">159.5</div>
+              <div class="height-item-label">遗传身高</div>
             </div>
-            <div class="ranking-stat">
-              <div class="ranking-stat-value" id="rankingAgeGroup">--</div>
-              <div class="ranking-stat-label">年龄组</div>
-            </div>
-            <div class="ranking-stat">
-              <div class="ranking-stat-value" id="rankingGender">--</div>
-              <div class="ranking-stat-label">性别组</div>
+            <div class="height-item">
+              <div class="height-item-value" id="reportTargetHeight">165</div>
+              <div class="height-item-label">期望成年身高</div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- 体型分析 -->
-        <div class="body-type-card">
-          <div class="body-type-header">
-            <span class="body-type-title">📊 体型分析</span>
-            <span class="body-type-badge" id="bodyTypeBadge">--</span>
-          </div>
-          <div class="body-type-grid">
-            <div class="body-type-item">
-              <div class="body-type-label">BMI 指数</div>
-              <div class="body-type-value" id="bmiValue">--</div>
-            </div>
-            <div class="body-type-item">
-              <div class="body-type-label">体重状态</div>
-              <div class="body-type-value" id="weightStatus">--</div>
-            </div>
-            <div class="body-type-item">
-              <div class="body-type-label">标准体重</div>
-              <div class="body-type-value" id="standardWeight">--</div>
-              <div class="body-type-unit">kg</div>
-            </div>
-            <div class="body-type-item">
-              <div class="body-type-label">与标准差值</div>
-              <div class="body-type-value" id="weightDiff">--</div>
-              <div class="body-type-unit">kg</div>
-            </div>
-          </div>
-          <div class="body-type-chart">
-            <div style="font-size: 13px; color: #636e72; margin-bottom: 10px; font-weight: 500;">BMI 分布位置</div>
-            <div class="body-type-bar">
-              <div class="body-type-fill" id="bmiFill" style="width: 0%"></div>
-            </div>
-            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #b2bec3; font-weight: 500;">
-              <span>偏瘦</span>
-              <span>正常</span>
-              <span>偏胖</span>
-              <span>肥胖</span>
-            </div>
-          </div>
+      <!-- 综合小结 -->
+      <div class="summary-card">
+        <div class="summary-header">
+          <div class="summary-title">综合小结</div>
+          <div class="summary-date" id="reportDate">2026.04.08</div>
         </div>
-
-        <!-- 健管助手 -->
-        <div class="assistant-card">
-          <div class="assistant-header">
-            <div class="assistant-avatar">👩‍⚕️</div>
-            <div class="assistant-info">
-              <h3>我的健管助手</h3>
-              <p>专业健康管理师一对一服务</p>
-            </div>
-          </div>
-          <div class="assistant-services">
-            <div class="assistant-service">
-              <div class="assistant-service-icon">📋</div>
-              <div class="assistant-service-name">报告解读</div>
-            </div>
-            <div class="assistant-service">
-              <div class="assistant-service-icon">🍎</div>
-              <div class="assistant-service-name">营养指导</div>
-            </div>
-            <div class="assistant-service">
-              <div class="assistant-service-icon">🏃</div>
-              <div class="assistant-service-name">运动建议</div>
-            </div>
-          </div>
-          <button class="assistant-btn" onclick="showWeChat()">💬 去咨询</button>
-        </div>
-
-        <!-- 当前身高状态 -->
-        <div class="result-section">
-          <div class="result-title">📊 当前身高状态</div>
+        <div class="summary-body">
           <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-label">当前身高</div>
-              <div class="stat-value" id="currentHeightDisplay">--</div>
+            <div class="stat-item">
+              <div class="stat-value" id="statHeight">123</div>
               <div class="stat-unit">cm</div>
+              <div class="stat-label">身高</div>
             </div>
-            <div class="stat-card">
-              <div class="stat-label">百分位排名</div>
-              <div class="stat-value" id="currentPercentileDisplay">--</div>
-              <div class="stat-unit">P 值</div>
+            <div class="stat-item">
+              <div class="stat-value" id="statPercentile">P50</div>
+              <div class="stat-unit"></div>
+              <div class="stat-label">身高 P 值</div>
             </div>
-            <div class="stat-card">
-              <div class="stat-label">超过同龄人</div>
-              <div class="stat-value" id="surpassPercentDisplay">--</div>
-              <div class="stat-unit">%</div>
+            <div class="stat-item">
+              <div class="stat-value" id="statWeight">25</div>
+              <div class="stat-unit">kg</div>
+              <div class="stat-label">体重</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="statWeightPercentile">P72</div>
+              <div class="stat-unit"></div>
+              <div class="stat-label">体重 P 值</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="statBMI">16.52</div>
+              <div class="stat-unit"></div>
+              <div class="stat-label">BMI</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" style="font-size: 16px;" id="statStatus">正常</div>
+              <div class="stat-unit"></div>
+              <div class="stat-label">体型状态</div>
             </div>
           </div>
-        </div>
 
-        <!-- 身高预测 -->
-        <div class="result-section">
-          <div class="result-title">🔮 身高预测</div>
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-label">预测成年身高</div>
-              <div class="stat-value" id="predictedHeight">--</div>
-              <div class="stat-unit">cm</div>
+          <div class="status-box good" id="statusBox">
+            <div class="status-title">
+              <div class="status-dot"></div>
+              身高处于正常范围
             </div>
-            <div class="stat-card">
-              <div class="stat-label">遗传身高</div>
-              <div class="stat-value" id="geneticHeight">--</div>
-              <div class="stat-unit">cm</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-label">预测范围</div>
-              <div class="stat-value" id="heightRange">--</div>
-              <div class="stat-unit">cm</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 生长曲线图 -->
-        <div class="result-section">
-          <div class="result-title">📈 生长曲线</div>
-          <div class="chart-container">
-            <canvas id="growthChart"></canvas>
-            <div class="chart-legend">
-              <div class="legend-item"><div class="legend-color" style="background: #e74c3c;"></div><span>P97</span></div>
-              <div class="legend-item"><div class="legend-color" style="background: #27ae60;"></div><span>P50</span></div>
-              <div class="legend-item"><div class="legend-color" style="background: #9b59b6;"></div><span>P3</span></div>
-              <div class="legend-item"><div class="legend-color" style="background: #2d3436; height: 5px;"></div><span>您的孩子</span></div>
+            <div class="status-text">
+              您的孩子身高处于正常范围。身高体重是衡量一个人健康状况和生活品质的重要标准之一，建议家长每 3 个月给孩子测量评估一次身高，日常生活中注意孩子的营养状况，坚持运动，保障优质的睡眠，从小对孩子进行科学的身高管理。
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 保存为图片按钮 -->
-      <button class="save-image-btn" onclick="saveAsImage()">
-        📷 保存报告为图片
-      </button>
-
-      <!-- 分享按钮 -->
-      <button class="share-btn" onclick="shareReport()">
-        🔗 分享解锁全国排名
-      </button>
-
-      <!-- 资讯文章 -->
-      <div class="article-section">
-        <div class="result-title" style="margin-bottom: 15px;">📚 身高成长资讯</div>
-        <div class="tabs">
-          <div class="tab active" onclick="switchTab('all')">全部</div>
-          <div class="tab" onclick="switchTab('nutrition')">营养</div>
-          <div class="tab" onclick="switchTab('exercise')">运动</div>
-          <div class="tab" onclick="switchTab('sleep')">睡眠</div>
-          <div class="tab" onclick="switchTab('health')">健康</div>
+      <!-- 身高预测 -->
+      <div class="prediction-card">
+        <div class="prediction-title">当前身高预测</div>
+        
+        <div class="prediction-method">
+          <div class="prediction-method-title">✨ 梧桐 AI 预测法</div>
+          <div class="prediction-result">
+            宝贝 18 岁 (成年) 预测身高为 <strong id="aiPredictHeight">159.2cm</strong><br>
+            比宝贝的期望身高 <span class="diff" id="aiPredictDiff">矮 5.8cm</span>
+          </div>
         </div>
-        <div class="article-list" id="articleList"></div>
+
+        <div class="prediction-method">
+          <div class="prediction-method-title">✨ 百分位预测法</div>
+          <div class="prediction-result">
+            宝贝 18 岁 (成年) 预测身高为 <strong id="percentilePredictHeight">160.6cm</strong><br>
+            比宝贝的期望身高 <span class="diff" id="percentilePredictDiff">矮 4.4cm</span>
+          </div>
+        </div>
       </div>
 
-      <div class="tip">
-        <p>💡 <strong>温馨提示：</strong></p>
-        <p>• P 值表示百分位排名，P50 表示超过 50% 的同龄孩子</p>
-        <p>• P3-P97 范围内都属于正常，低于 P3 或高于 P97 建议咨询医生</p>
-        <p>• 身高受遗传 (70%)、营养、运动、睡眠、环境等多因素影响</p>
-        <p>• 保持均衡饮食、充足睡眠和适量运动有助于健康成长</p>
+      <!-- 生长曲线图 -->
+      <div class="chart-container">
+        <div class="chart-title">生长曲线</div>
+        <canvas id="growthChart"></canvas>
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-color" style="background: #EF5350;"></div>
+            <span>P97</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: #66BB6A;"></div>
+            <span>P50</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: #AB47BC;"></div>
+            <span>P3</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: #66BB6A; border: 2px dashed #2E7D32;"></div>
+            <span>您的孩子</span>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- 登录弹窗 -->
-  <div class="login-modal" id="loginModal">
-    <button class="login-close" onclick="closeLogin()">×</button>
-    <div class="login-card">
-      <div class="login-card-title">👤 用户登录</div>
-      <div class="login-card-subtitle">登录后查看完整报告和全国排名</div>
-      <input type="text" class="login-input" id="loginPhone" placeholder="请输入手机号">
-      <input type="tel" class="login-input" id="loginCode" placeholder="请输入验证码" maxlength="6">
-      <button class="login-btn" onclick="doLogin()">获取验证码</button>
-      <p style="font-size: 12px; color: #b2bec3; margin-top: 15px; text-align: center;">
-        登录即代表您同意《用户协议》和《隐私政策》
-      </p>
+      <!-- 免责声明 -->
+      <div class="disclaimer">
+        注意：本建议仅供医学科普参考使用，不能代替专业诊疗。<br>
+        身高预测仅供参考，影响成年身高的因素很多，建议前往专业医疗机构获取医生的专业建议。
+      </div>
+
+      <!-- 底部按钮 -->
+      <div class="bottom-actions">
+        <button class="action-btn share" onclick="shareReport()">
+          🔗 分享
+        </button>
+        <button class="action-btn save" onclick="saveAsImage()">
+          📷 保存图片
+        </button>
+      </div>
     </div>
   </div>
 
   <!-- 说明弹窗 -->
-  <div class="help-modal" id="helpModal">
-    <div class="help-content">
-      <button class="login-close" onclick="closeHelp()">×</button>
-      <h2 class="help-title">📖 使用说明</h2>
-      <div class="help-section">
-        <div class="help-section-title">1. 如何使用</div>
-        <div class="help-section-content">
-          <ul>
-            <li>输入孩子的基本信息（姓名、性别、出生日期）</li>
-            <li>填写当前身高、体重数据</li>
-            <li>输入父母身高用于遗传分析</li>
-            <li>点击"开始评估"生成报告</li>
-          </ul>
-        </div>
-      </div>
-      <div class="help-section">
-        <div class="help-section-title">2. 报告解读</div>
-        <div class="help-section-content">
-          <ul>
-            <li><strong>P 值百分位：</strong>表示超过同龄孩子的百分比，P50 为平均水平</li>
-            <li><strong>预测身高：</strong>基于遗传和当前生长趋势的成年身高预测</li>
-            <li><strong>BMI 指数：</strong>评估体型状态，正常范围 14-18.5</li>
-            <li><strong>生长曲线：</strong>追踪孩子生长轨迹，判断生长趋势</li>
-          </ul>
-        </div>
-      </div>
-      <div class="help-section">
-        <div class="help-section-title">3. 全国排名</div>
-        <div class="help-section-content">
-          <ul>
-            <li>分享报告后可解锁全国排名功能</li>
-            <li>查看孩子在全国同龄人中的位置</li>
-            <li>了解身高水平的相对位置</li>
-          </ul>
-        </div>
-      </div>
-      <div class="help-section">
-        <div class="help-section-title">4. 健管助手</div>
-        <div class="help-section-content">
-          <ul>
-            <li>点击"去咨询"添加企业微信</li>
-            <li>获取专业健康管理师一对一服务</li>
-            <li>报告解读、营养指导、运动建议</li>
-          </ul>
-        </div>
-      </div>
-      <div class="help-section">
-        <div class="help-section-title">5. 保存报告</div>
-        <div class="help-section-content">
-          <ul>
-            <li>点击"保存报告为图片"按钮</li>
-            <li>报告将保存为 PNG 格式</li>
-            <li>可分享到微信朋友圈或保存留念</li>
-          </ul>
-        </div>
-      </div>
-      <button class="help-close" onclick="closeHelp()">我知道了</button>
-    </div>
-  </div>
-
-  <!-- 企业微信二维码弹窗 -->
-  <div class="wechat-modal" id="wechatModal">
-    <div class="wechat-card">
-      <button class="login-close" onclick="closeWeChat()">×</button>
-      <div class="wechat-title">💬 添加健管助手</div>
-      <div class="wechat-subtitle">扫描二维码，获取专业健康指导</div>
-      <div class="wechat-qr">
-        📱
-      </div>
-      <div class="wechat-tips">
-        <p><strong>服务时间：</strong>周一至周日 9:00-21:00</p>
-        <p><strong>服务内容：</strong>报告解读、营养指导、运动建议、生长跟踪</p>
-        <p style="margin-top: 12px; font-size: 12px; color: #b2bec3;">温馨提示：添加后请备注"身高评估"，我们将优先通过</p>
-      </div>
-      <button class="wechat-close" onclick="closeWeChat()">关闭</button>
-    </div>
-  </div>
-
-  <!-- 文章详情弹窗 -->
-  <div class="modal" id="articleModal">
+  <div class="modal" id="helpModal">
     <div class="modal-content">
-      <button class="modal-close" onclick="closeArticleModal()">×</button>
-      <h2 class="modal-title" id="articleModalTitle"></h2>
-      <div class="modal-body" id="articleModalBody"></div>
+      <button class="modal-close" onclick="closeHelp()">×</button>
+      <div class="modal-title">📖 使用说明</div>
+      <div class="modal-body">
+        <p><strong>1. 填写信息</strong></p>
+        <p>输入孩子的基本信息和当前身高体重数据</p>
+        <br>
+        <p><strong>2. 生成报告</strong></p>
+        <p>点击保存后自动生成身高评估报告</p>
+        <br>
+        <p><strong>3. 报告解读</strong></p>
+        <p>P 值表示百分位排名，P50 表示超过 50% 的同龄孩子，P3-P97 范围内都属于正常</p>
+        <br>
+        <p><strong>4. 保存分享</strong></p>
+        <p>可以保存图片保存留念，或分享给家人</p>
+      </div>
     </div>
   </div>
 
@@ -1785,132 +934,20 @@
       }
     };
 
-    // 默认文章数据
-    const defaultArticles = [
-      { id: 1, title: '孩子长高的三大黄金期', summary: '0-3 岁婴幼儿期、4-10 岁儿童期、11-18 岁青春期是身高增长的三个关键阶段', tags: ['hot'], category: 'health' },
-      { id: 2, title: '长高必备：5 种营养素', summary: '蛋白质、钙、维生素 D、锌、维生素 A 是孩子长高的关键营养素', tags: [], category: 'nutrition' },
-      { id: 3, title: '5 种最助长高运动', summary: '跳绳、篮球、游泳、摸高、拉伸运动，科学运动能刺激生长激素分泌', tags: ['hot'], category: 'exercise' },
-      { id: 4, title: '睡眠与长高的关系', summary: '生长激素在深度睡眠时分泌最旺盛，晚上 9 点 - 凌晨 1 点是分泌高峰', tags: [], category: 'sleep' },
-      { id: 5, title: '身高偏矮怎么办？', summary: '发现孩子身高低于 P3 百分位或年增长不足 5cm，应及时就医', tags: [], category: 'health' },
-      { id: 6, title: '补钙误区大揭秘', summary: '骨头汤不补钙、钙片不是越多越好、维生素 D 比钙更重要', tags: ['new'], category: 'nutrition' }
-    ];
-
     let selectedGender = '';
     let growthChart = null;
-    let currentFilter = 'all';
-    let currentUser = null;
-    let isShared = false;
 
-    // 初始化数据库
-    function initDatabase() {
-      if (typeof db !== 'undefined') {
-        db.recordVisit();
-        console.log('📊 数据库已初始化:', db.getInfo());
-      }
-    }
-
-    // 用户登录管理
-    function checkLoginStatus() {
-      const user = localStorage.getItem('currentUser');
-      if (user) {
-        currentUser = JSON.parse(user);
-        updateNav();
-      }
-      const shared = localStorage.getItem('hasShared');
-      if (shared === 'true') isShared = true;
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('shared') === '1') {
-        isShared = true;
-        localStorage.setItem('hasShared', 'true');
-      }
-    }
-
-    function showLogin() {
-      if (currentUser) {
-        if (confirm('确定要退出登录吗？')) logout();
-        return;
-      }
-      document.getElementById('loginModal').classList.add('show');
-    }
-
-    function closeLogin() {
-      document.getElementById('loginModal').classList.remove('show');
-    }
-
-    function doLogin() {
-      const phone = document.getElementById('loginPhone').value.trim();
-      if (!phone || phone.length !== 11) { alert('请输入正确的手机号'); return; }
+    // 初始化日期
+    document.addEventListener('DOMContentLoaded', function() {
+      const today = new Date();
+      document.getElementById('measureDate').valueAsDate = today;
       
-      // 保存到数据库
-      const user = typeof db !== 'undefined' 
-        ? db.upsertUser({ phone, name: phone.substring(0, 3) + '****' + phone.substring(7) })
-        : { phone, name: phone.substring(0, 3) + '****' + phone.substring(7) };
-      
-      currentUser = user;
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      updateNav();
-      closeLogin();
-      
-      console.log('👤 用户登录:', user);
-      alert('登录成功！');
-    }
+      const tenYearsAgo = new Date();
+      tenYearsAgo.setFullYear(tenYearsAgo.getFullYear() - 10);
+      document.getElementById('birthDate').valueAsDate = tenYearsAgo;
+    });
 
-    function logout() {
-      currentUser = null;
-      localStorage.removeItem('currentUser');
-      updateNav();
-      alert('已退出登录');
-    }
-
-    function updateNav() {
-      const navName = document.getElementById('navUserName');
-      const logoutBtn = document.getElementById('logoutBtn');
-      if (currentUser) {
-        navName.textContent = currentUser.name;
-        logoutBtn.style.display = 'block';
-      } else {
-        navName.textContent = '点击登录';
-        logoutBtn.style.display = 'none';
-      }
-    }
-
-    // 分享功能
-    function shareReport() {
-      isShared = true;
-      localStorage.setItem('hasShared', 'true');
-      document.getElementById('shareTip').style.display = 'flex';
-      const url = window.location.href.split('?')[0] + '?shared=1';
-      if (navigator.share) {
-        navigator.share({ title: '儿童身高评估报告', text: '快来看看孩子的身高发育情况！', url: url }).catch(() => {});
-      } else {
-        navigator.clipboard.writeText(url).then(() => alert('链接已复制，分享给好友解锁全国排名！'));
-      }
-      if (document.getElementById('result').classList.contains('show')) {
-        document.getElementById('rankingCard').style.display = 'block';
-      }
-    }
-
-    // 说明页面
-    function showHelp() { document.getElementById('helpModal').classList.add('show'); }
-    function closeHelp() { document.getElementById('helpModal').classList.remove('show'); }
-
-    // 企业微信
-    function showWeChat() { document.getElementById('wechatModal').classList.add('show'); }
-    function closeWeChat() { document.getElementById('wechatModal').classList.remove('show'); }
-
-    // 保存为图片
-    function saveAsImage() {
-      const reportArea = document.getElementById('reportArea');
-      html2canvas(reportArea, { scale: 2, backgroundColor: '#ffffff', logging: false, useCORS: true }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = `身高评估报告_${new Date().toISOString().split('T')[0]}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        alert('报告已保存为图片！');
-      }).catch(err => { alert('保存失败，请截图保存'); console.error(err); });
-    }
-
-    // 页面功能
+    // 性别选择
     function selectGender(gender) {
       selectedGender = gender;
       document.getElementById('gender').value = gender;
@@ -1918,55 +955,51 @@
       document.querySelector(`[data-gender="${gender}"]`).classList.add('selected');
     }
 
+    // 计算年龄
     function calculateAge(birthDate) {
       const today = new Date();
       const birth = new Date(birthDate);
-      let age = today.getFullYear() - birth.getFullYear();
-      const monthDiff = today.getMonth() - birth.getMonth();
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) age--;
-      return age;
+      let years = today.getFullYear() - birth.getFullYear();
+      let months = today.getMonth() - birth.getMonth();
+      let days = today.getDate() - birth.getDate();
+      
+      if (days < 0) {
+        months--;
+        const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 0);
+        days += lastMonth.getDate();
+      }
+      
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+      
+      return { years, months, days, totalYears: years + months / 12 };
     }
 
+    function formatAge(years, months, days) {
+      return `${years}岁${months}个月${days}天`;
+    }
+
+    // 计算 BMI
     function calculateBMI(height, weight) {
       const heightM = height / 100;
-      return (weight / (heightM * heightM)).toFixed(1);
+      return (weight / (heightM * heightM)).toFixed(2);
     }
 
-    function getBMIStatus(bmi) {
-      if (bmi < 14) return { text: '偏瘦', class: 'slim', fillClass: 'blue', fillPercent: 25 };
-      if (bmi < 18.5) return { text: '正常', class: 'normal', fillClass: 'green', fillPercent: 50 };
-      if (bmi < 24) return { text: '偏胖', class: 'overweight', fillClass: 'orange', fillPercent: 75 };
-      return { text: '肥胖', class: 'obese', fillClass: 'red', fillPercent: 90 };
-    }
-
-    function calculateStandardWeight(height, age) {
-      if (age < 2) return height - 50;
-      if (age < 6) return height - 60;
-      if (age < 12) return height - 70;
-      return height - 80;
-    }
-
-    function interpolateHeight(standard, age) {
-      const ages = standard.age;
-      if (age <= ages[0]) return { P3: standard.P3[0], P25: standard.P25[0], P50: standard.P50[0], P75: standard.P75[0], P97: standard.P97[0] };
-      if (age >= ages[ages.length - 1]) return { P3: standard.P3[ages.length - 1], P25: standard.P25[ages.length - 1], P50: standard.P50[ages.length - 1], P75: standard.P75[ages.length - 1], P97: standard.P97[ages.length - 1] };
-      let lowerIdx = 0;
-      for (let i = 0; i < ages.length; i++) { if (ages[i] <= age) lowerIdx = i; else break; }
-      const upperIdx = lowerIdx + 1;
-      const ratio = (age - ages[lowerIdx]) / (ages[upperIdx] - ages[lowerIdx]);
-      return {
-        P3: standard.P3[lowerIdx] + (standard.P3[upperIdx] - standard.P3[lowerIdx]) * ratio,
-        P25: standard.P25[lowerIdx] + (standard.P25[upperIdx] - standard.P25[lowerIdx]) * ratio,
-        P50: standard.P50[lowerIdx] + (standard.P50[upperIdx] - standard.P50[lowerIdx]) * ratio,
-        P75: standard.P75[lowerIdx] + (standard.P75[upperIdx] - standard.P75[lowerIdx]) * ratio,
-        P97: standard.P97[lowerIdx] + (standard.P97[upperIdx] - standard.P97[lowerIdx]) * ratio
-      };
-    }
-
+    // 计算百分位
     function calculatePercentile(height, standards) {
       if (height <= standards.P3) return 3;
       if (height >= standards.P97) return 97;
-      const percentiles = [{ p: 3, h: standards.P3 }, { p: 25, h: standards.P25 }, { p: 50, h: standards.P50 }, { p: 75, h: standards.P75 }, { p: 97, h: standards.P97 }];
+      
+      const percentiles = [
+        { p: 3, h: standards.P3 },
+        { p: 25, h: standards.P25 },
+        { p: 50, h: standards.P50 },
+        { p: 75, h: standards.P75 },
+        { p: 97, h: standards.P97 }
+      ];
+      
       for (let i = 0; i < percentiles.length - 1; i++) {
         if (height >= percentiles[i].h && height <= percentiles[i + 1].h) {
           const ratio = (height - percentiles[i].h) / (percentiles[i + 1].h - percentiles[i].h);
@@ -1976,182 +1009,273 @@
       return 50;
     }
 
-    function getHeightLevel(percentile) {
-      if (percentile < 3) return '偏矮';
-      if (percentile < 10) return '中下';
-      if (percentile < 25) return '中下';
-      if (percentile < 75) return '中等';
-      if (percentile < 90) return '中上';
-      if (percentile < 97) return '偏高';
-      return '偏高';
+    // 插值计算标准值
+    function interpolateHeight(standard, age) {
+      const ages = standard.age;
+      if (age <= ages[0]) return { P3: standard.P3[0], P25: standard.P25[0], P50: standard.P50[0], P75: standard.P75[0], P97: standard.P97[0] };
+      if (age >= ages[ages.length - 1]) return { P3: standard.P3[ages.length - 1], P25: standard.P25[ages.length - 1], P50: standard.P50[ages.length - 1], P75: standard.P75[ages.length - 1], P97: standard.P97[ages.length - 1] };
+      
+      let lowerIdx = 0;
+      for (let i = 0; i < ages.length; i++) {
+        if (ages[i] <= age) lowerIdx = i;
+        else break;
+      }
+      
+      const upperIdx = lowerIdx + 1;
+      const ratio = (age - ages[lowerIdx]) / (ages[upperIdx] - ages[lowerIdx]);
+      
+      return {
+        P3: standard.P3[lowerIdx] + (standard.P3[upperIdx] - standard.P3[lowerIdx]) * ratio,
+        P25: standard.P25[lowerIdx] + (standard.P25[upperIdx] - standard.P25[lowerIdx]) * ratio,
+        P50: standard.P50[lowerIdx] + (standard.P50[upperIdx] - standard.P50[lowerIdx]) * ratio,
+        P75: standard.P75[lowerIdx] + (standard.P75[upperIdx] - standard.P75[lowerIdx]) * ratio,
+        P97: standard.P97[lowerIdx] + (standard.P97[upperIdx] - standard.P97[lowerIdx]) * ratio
+      };
     }
 
+    // 预测身高
     function predictHeight(gender, fatherHeight, motherHeight, currentHeight, age) {
-      let geneticHeight = gender === 'boy' ? (fatherHeight + motherHeight + 13) / 2 : (fatherHeight + motherHeight - 13) / 2;
+      let geneticHeight = gender === 'boy' 
+        ? (fatherHeight + motherHeight + 13) / 2 
+        : (fatherHeight + motherHeight - 13) / 2;
+      
       const currentGeneticRatio = currentHeight / geneticHeight;
       let predictedHeight = geneticHeight;
+      
       if (currentGeneticRatio < 0.9 && age < 12) predictedHeight = geneticHeight - 3;
       else if (currentGeneticRatio > 1.1 && age < 12) predictedHeight = geneticHeight + 3;
-      return { predicted: Math.round(predictedHeight), genetic: Math.round(geneticHeight), min: Math.round(geneticHeight - 5), max: Math.round(geneticHeight + 5) };
+      
+      // 百分位预测
+      const standard = heightStandards[gender];
+      const currentStandards = interpolateHeight(standard, 18);
+      const percentile = calculatePercentile(currentHeight, interpolateHeight(standard, age));
+      const percentilePredicted = currentStandards.P50 * (percentile / 50);
+      
+      return {
+        ai: Math.round(predictedHeight * 10) / 10,
+        percentile: Math.round(percentilePredicted * 10) / 10,
+        genetic: Math.round(geneticHeight * 10) / 10
+      };
     }
 
+    // 绘制生长曲线
     function drawGrowthChart(gender, currentAge, currentHeight) {
       const ctx = document.getElementById('growthChart').getContext('2d');
       const standard = heightStandards[gender];
+      
       if (growthChart) growthChart.destroy();
+      
       const labels = standard.age;
       const childData = new Array(labels.length).fill(null);
       const ageIndex = Math.round(currentAge);
-      if (ageIndex >= 0 && ageIndex < labels.length) childData[ageIndex] = currentHeight;
+      if (ageIndex >= 0 && ageIndex < labels.length) {
+        childData[ageIndex] = currentHeight;
+      }
+      
       growthChart = new Chart(ctx, {
         type: 'line',
         data: {
           labels: labels.map(a => a + '岁'),
           datasets: [
-            { label: 'P97', data: standard.P97, borderColor: '#e74c3c', borderWidth: 2, borderDash: [5, 5], fill: false, pointRadius: 0 },
-            { label: 'P50', data: standard.P50, borderColor: '#27ae60', borderWidth: 2, fill: false, pointRadius: 0 },
-            { label: 'P3', data: standard.P3, borderColor: '#9b59b6', borderWidth: 2, borderDash: [5, 5], fill: false, pointRadius: 0 },
-            { label: '您的孩子', data: childData, borderColor: '#2d3436', backgroundColor: '#2d3436', borderWidth: 3, pointRadius: 6, fill: false }
+            {
+              label: 'P97',
+              data: standard.P97,
+              borderColor: '#EF5350',
+              borderWidth: 2,
+              borderDash: [5, 5],
+              fill: false,
+              pointRadius: 0
+            },
+            {
+              label: 'P50',
+              data: standard.P50,
+              borderColor: '#66BB6A',
+              borderWidth: 2,
+              fill: false,
+              pointRadius: 0
+            },
+            {
+              label: 'P3',
+              data: standard.P3,
+              borderColor: '#AB47BC',
+              borderWidth: 2,
+              borderDash: [5, 5],
+              fill: false,
+              pointRadius: 0
+            },
+            {
+              label: '您的孩子',
+              data: childData,
+              borderColor: '#2E7D32',
+              backgroundColor: '#2E7D32',
+              borderWidth: 3,
+              pointRadius: 8,
+              fill: false
+            }
           ]
         },
-        options: { responsive: true, maintainAspectRatio: true, aspectRatio: 1.5, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { min: 40, max: 200 } } }
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          aspectRatio: 1.5,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: {
+              grid: { display: false }
+            },
+            y: {
+              min: 40,
+              max: 200
+            }
+          }
+        }
       });
     }
-
-    function switchTab(category) {
-      currentFilter = category;
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      event.target.classList.add('active');
-      renderArticles();
-    }
-
-    function renderArticles() {
-      const container = document.getElementById('articleList');
-      const filtered = currentFilter === 'all' ? defaultArticles : defaultArticles.filter(a => a.category === currentFilter);
-      container.innerHTML = filtered.map(article => `
-        <div class="article-card" onclick="openArticle(${article.id})">
-          <div class="article-title">${article.title}</div>
-          <div class="article-summary">${article.summary}</div>
-          <div class="article-tags">
-            ${article.tags.map(tag => `<span class="article-tag ${tag}">${tag === 'hot' ? '🔥 热门' : tag === 'new' ? '✨ 新知' : tag}</span>`).join('')}
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function openArticle(id) {
-      const article = defaultArticles.find(a => a.id === id);
-      if (!article) return;
-      document.getElementById('articleModalTitle').textContent = article.title;
-      document.getElementById('articleModalBody').innerHTML = `<p style="margin-bottom: 15px;"><span class="article-tag">${article.category}</span></p><p>${article.summary}</p>`;
-      document.getElementById('articleModal').classList.add('show');
-    }
-
-    function closeArticleModal() { document.getElementById('articleModal').classList.remove('show'); }
-    document.getElementById('articleModal').addEventListener('click', function(e) { if (e.target === this) closeArticleModal(); });
 
     // 表单提交
     document.getElementById('heightForm').addEventListener('submit', function(e) {
       e.preventDefault();
+      
       const childName = document.getElementById('childName').value || '匿名';
       const gender = document.getElementById('gender').value;
       const birthDate = document.getElementById('birthDate').value;
+      const measureDate = document.getElementById('measureDate').value;
       const currentHeight = parseFloat(document.getElementById('currentHeight').value);
       const currentWeight = parseFloat(document.getElementById('currentWeight').value);
-      const fatherHeight = parseFloat(document.getElementById('fatherHeight').value);
-      const motherHeight = parseFloat(document.getElementById('motherHeight').value);
-      const targetHeight = document.getElementById('targetHeight').value;
+      const fatherHeight = parseFloat(document.getElementById('fatherHeight').value) || 175;
+      const motherHeight = parseFloat(document.getElementById('motherHeight').value) || 163;
+      const targetHeight = parseFloat(document.getElementById('targetHeight').value) || 165;
 
-      if (!selectedGender) { alert('请选择孩子性别'); return; }
+      if (!selectedGender) {
+        alert('请选择孩子性别');
+        return;
+      }
 
       const age = calculateAge(birthDate);
       const bmi = calculateBMI(currentHeight, currentWeight);
-      const bmiStatus = getBMIStatus(bmi);
       const standard = heightStandards[gender];
-      const currentStandards = interpolateHeight(standard, age);
+      const currentStandards = interpolateHeight(standard, age.totalYears);
       const percentile = calculatePercentile(currentHeight, currentStandards);
-      const prediction = predictHeight(gender, fatherHeight, motherHeight, currentHeight, age);
-      const standardWeight = calculateStandardWeight(currentHeight, age);
-      const weightDiff = (currentWeight - standardWeight).toFixed(1);
+      const prediction = predictHeight(gender, fatherHeight, motherHeight, currentHeight, age.totalYears);
+
+      // 更新报告页面
+      document.getElementById('reportChildName').innerHTML = `${childName} ${gender === 'boy' ? '♂' : '♀'}`;
+      document.getElementById('reportAvatar').textContent = gender === 'boy' ? '👦' : '👧';
+      document.getElementById('reportAge').textContent = formatAge(age.years, age.months, age.days);
+      document.getElementById('reportGeneticHeight').textContent = prediction.genetic;
+      document.getElementById('reportTargetHeight').textContent = targetHeight;
+      
+      const today = new Date(measureDate);
+      document.getElementById('reportDate').textContent = today.toLocaleDateString('zh-CN').replace(/\//g, '.');
+      
+      document.getElementById('statHeight').textContent = currentHeight;
+      document.getElementById('statPercentile').textContent = `P${Math.round(percentile)}`;
+      document.getElementById('statWeight').textContent = currentWeight;
+      document.getElementById('statWeightPercentile').textContent = `P${Math.round(calculatePercentile(currentWeight, {P3: 15, P25: 18, P50: 22, P75: 26, P97: 32}))}`;
+      document.getElementById('statBMI').textContent = bmi;
+      
+      const bmiStatus = bmi < 14 ? '偏瘦' : bmi < 18.5 ? '正常' : bmi < 24 ? '偏胖' : '肥胖';
+      document.getElementById('statStatus').textContent = bmiStatus;
+      
+      // 更新预测
+      const aiDiff = (targetHeight - prediction.ai).toFixed(1);
+      const percentileDiff = (targetHeight - prediction.percentile).toFixed(1);
+      
+      document.getElementById('aiPredictHeight').textContent = `${prediction.ai}cm`;
+      document.getElementById('aiPredictDiff').textContent = `${aiDiff >= 0 ? '矮' : '高'}${Math.abs(aiDiff)}cm`;
+      document.getElementById('aiPredictDiff').className = `diff ${aiDiff <= 0 ? 'good' : ''}`;
+      
+      document.getElementById('percentilePredictHeight').textContent = `${prediction.percentile}cm`;
+      document.getElementById('percentilePredictDiff').textContent = `${percentileDiff >= 0 ? '矮' : '高'}${Math.abs(percentileDiff)}cm`;
+      document.getElementById('percentilePredictDiff').className = `diff ${percentileDiff <= 0 ? 'good' : ''}`;
+
+      // 绘制图表
+      drawGrowthChart(gender, age.totalYears, currentHeight);
 
       // 保存到数据库
       const recordData = {
-        userPhone: currentUser ? currentUser.phone : null,
+        userPhone: null,
         childName: childName,
         gender: gender,
         birthDate: birthDate,
-        age: age,
+        age: age.totalYears,
         height: currentHeight,
         weight: currentWeight,
         fatherHeight: fatherHeight,
         motherHeight: motherHeight,
-        targetHeight: targetHeight || null,
+        targetHeight: targetHeight,
         percentile: Math.round(percentile),
-        predictedHeight: prediction.predicted,
+        predictedHeight: prediction.ai,
         geneticHeight: prediction.genetic,
-        bmi: bmi
+        bmi: bmi,
+        measureDate: measureDate
       };
       
-      let savedRecord;
       if (typeof db !== 'undefined') {
-        savedRecord = db.saveRecord(recordData);
-        console.log('💾 记录已保存到数据库:', savedRecord.id);
+        db.saveRecord(recordData);
       } else {
-        // 降级到 localStorage
-        const record = { id: Date.now(), ...recordData, timestamp: new Date().toISOString() };
         const records = JSON.parse(localStorage.getItem('heightAssessmentRecords') || '[]');
-        records.unshift(record);
+        records.unshift({ id: Date.now(), ...recordData, timestamp: new Date().toISOString() });
         localStorage.setItem('heightAssessmentRecords', JSON.stringify(records));
-        savedRecord = record;
       }
 
-      document.getElementById('currentHeightDisplay').textContent = currentHeight;
-      document.getElementById('currentPercentileDisplay').textContent = `P${Math.round(percentile)}`;
-      document.getElementById('surpassPercentDisplay').textContent = Math.round(percentile);
-      
-      document.getElementById('bodyTypeBadge').textContent = bmiStatus.text;
-      document.getElementById('bodyTypeBadge').className = `body-type-badge ${bmiStatus.class}`;
-      document.getElementById('bmiValue').textContent = bmi;
-      document.getElementById('weightStatus').textContent = bmiStatus.text;
-      document.getElementById('standardWeight').textContent = standardWeight.toFixed(1);
-      document.getElementById('weightDiff').textContent = (weightDiff >= 0 ? '+' : '') + weightDiff;
-      document.getElementById('weightDiff').style.color = weightDiff >= 0 ? '#e74c3c' : '#27ae60';
-      document.getElementById('bmiFill').className = `body-type-fill ${bmiStatus.fillClass}`;
-      document.getElementById('bmiFill').style.width = `${bmiStatus.fillPercent}%`;
-
-      if (isShared) {
-        document.getElementById('rankingCard').style.display = 'block';
-        document.getElementById('rankingPercentile').textContent = Math.round(percentile);
-        document.getElementById('rankingSurpass').textContent = Math.round(percentile);
-        document.getElementById('rankingFill').style.width = `${percentile}%`;
-        document.getElementById('rankingLevel').textContent = getHeightLevel(percentile);
-        document.getElementById('rankingAgeGroup').textContent = `${age}岁`;
-        document.getElementById('rankingGender').textContent = gender === 'boy' ? '男孩' : '女孩';
-        document.getElementById('shareTip').style.display = 'flex';
-      } else {
-        document.getElementById('rankingCard').style.display = 'none';
-      }
-
-      document.getElementById('predictedHeight').textContent = prediction.predicted;
-      document.getElementById('geneticHeight').textContent = prediction.genetic;
-      document.getElementById('heightRange').textContent = `${prediction.min}~${prediction.max}`;
-
-      drawGrowthChart(gender, age, currentHeight);
-      renderArticles();
-
-      document.getElementById('result').classList.add('show');
-      setTimeout(() => document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+      // 切换到报告页面
+      document.getElementById('formPage').style.display = 'none';
+      document.getElementById('reportPage').classList.add('show');
+      document.querySelector('.top-bar-title').textContent = '身高报告';
+      window.scrollTo(0, 0);
     });
 
-    window.addEventListener('load', function() {
-      initDatabase();
-      checkLoginStatus();
-      const tenYearsAgo = new Date();
-      tenYearsAgo.setFullYear(tenYearsAgo.getFullYear() - 10);
-      document.getElementById('birthDate').valueAsDate = tenYearsAgo;
-      renderArticles();
-      
-      console.log('🚀 页面加载完成，数据库已就绪');
+    // 保存为图片
+    function saveAsImage() {
+      const reportArea = document.querySelector('.container');
+      html2canvas(reportArea, { 
+        scale: 2, 
+        backgroundColor: '#F5F5F5', 
+        logging: false, 
+        useCORS: true,
+        scrollY: 0
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `身高评估报告_${new Date().toISOString().split('T')[0]}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }).catch(err => {
+        alert('保存失败，请截图保存');
+        console.error(err);
+      });
+    }
+
+    // 分享
+    function shareReport() {
+      const url = window.location.href;
+      if (navigator.share) {
+        navigator.share({ 
+          title: '儿童身高评估报告', 
+          text: '快来看看孩子的身高发育情况！', 
+          url: url 
+        }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(url).then(() => {
+          alert('链接已复制，可以分享给家人啦！');
+        });
+      }
+    }
+
+    // 帮助弹窗
+    function showHelp() {
+      document.getElementById('helpModal').classList.add('show');
+    }
+
+    function closeHelp() {
+      document.getElementById('helpModal').classList.remove('show');
+    }
+
+    // 点击弹窗外部关闭
+    document.getElementById('helpModal').addEventListener('click', function(e) {
+      if (e.target === this) closeHelp();
     });
   </script>
 </body>
